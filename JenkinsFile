@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    
+
     environment {
         EMAIL_RECIPIENT = 'jack.a.jonesofficial@gmail.com'
         EMAIL_SUBJECT_SUCCESS = '6.1C Pipeline Status'
@@ -11,121 +11,91 @@ pipeline {
     stages {
         stage('Build using Maven') {
             steps {
-                script {
-                    echo "Build project_code.jar with Maven."
-                    echo "Building..."
-                    sleep 1
-                    echo "SUCCESS"
-                }
+                echo "Build project_code.jar with Maven."
+                echo "Building..."
+                sleep 1
+                echo "SUCCESS"
             }
         }
         stage('Unit and Integration Tests using JUnit') {
             steps {
-                script {
-                    echo "Run unit tests on project_code.jar using JUnit."
-                    echo "Testing..."
-                    sleep 1
-                    echo "SUCCESS"
-                    echo "Run integration tests on project_code.jar using JUnit."
-                    sleep 1
-                    echo "SUCCESS"
-                }
-            }
-            post {
-                success {
-                    script {
-                        emailext(
-                            to: "${EMAIL_RECIPIENT}",
-                            subject: "${EMAIL_SUBJECT_SUCCESS}",
-                            body: "Stage: Unit and Integration Tests using JUnit was successful!",
-                            attachmentsPattern: '**/build.log'
-                        )
+                echo "Run unit tests on project_code.jar using JUnit."
+                echo "Testing..."
+                sleep 1
+                echo "SUCCESS"
+                echo "Run integration tests on project_code.jar using JUnit."
+                sleep 1
+                echo "SUCCESS"
+                
+                // Send email upon successful or unsuccessful stage
+                post {
+                    success {
+                    mail to: "$EMAIL_RECIPIENT"
+                    subject: "$EMAIL_SUBJECT_SUCCESS"
+                    body: "Stage: Unit and Integration Tests using JUnit was successful!"
                     }
-                }
-                failure {
-                    script {
-                        emailext(
-                            to: "${EMAIL_RECIPIENT}",
-                            subject: "${EMAIL_SUBJECT_FAILURE}",
-                            body: "Stage: Unit and Integration Tests using JUnit was unsuccessful! Debug the code and fix the errors before building again.",
-                            attachmentsPattern: '**/build.log'
-                        )
+                    failure {
+                    mail to: "$EMAIL_RECIPIENT"
+                    subject: "$EMAIL_SUBJECT_FAILURE"
+                    body: "Stage: Unit and Integration Tests using JUnit was unsuccessful! Debug the code and fix the errors before building again."
                     }
                 }
             }
         }
         stage('Code Analysis using PMD') {
             steps {
-                script {
-                    echo "Performing code quality analysis on project_code.jar using PMD."
-                    echo "Analysing..."
-                    sleep 1
-                    echo "SUCCESS"
-                    echo "Secondary check for specific industry standards"
-                    sleep 1
-                    echo "SUCCESS"
-                }
+                echo "Performing code quality analysis on project_code.jar using PMD."
+                echo "Analysing..."
+                sleep 1
+                echo "SUCCESS"
+                echo "Secondary check for specific industry standards"
+                sleep 1
+                echo "SUCCESS"
             }
         }
         stage('Security Scan using Insider CLI') {
             steps {
-                script {
-                    echo "Perform security check on project_code.jar using Insider CLI"
-                    sleep 1
-                    echo "SUCCESS"
-                    echo "No profound security flaws detected. Score: 98%"
-                }
-            }
-            post {
-                success {
-                    script {
-                        emailext(
-                            to: "${EMAIL_RECIPIENT}",
-                            subject: "${EMAIL_SUBJECT_SUCCESS}",
-                            body: "Stage: Security Scan using Insider CLI was successful!",
-                            attachmentsPattern: '**/build.log'
-                        )
+                echo "Perform security check on project_code.jar using Insider CLI"
+                sleep 1
+                echo "SUCCESS"
+                echo "No profound security flaws detected. Score: 98%"
+
+                // Send email upon successful or unsuccessful stage
+                post {
+                    success {
+                    mail to: "$EMAIL_RECIPIENT"
+                    subject: "$EMAIL_SUBJECT_SUCCESS"
+                    body: "Stage: Security Scan using Insider CLI was successful!"
                     }
-                }
-                failure {
-                    script {
-                        emailext(
-                            to: "${EMAIL_RECIPIENT}",
-                            subject: "${EMAIL_SUBJECT_FAILURE}",
-                            body: "Stage: Security Scan using Insider CLI was unsuccessful! Debug the code and fix the errors before building again.",
-                            attachmentsPattern: '**/build.log'
-                        )
+                    failure {
+                    mail to: "$EMAIL_RECIPIENT"
+                    subject: "$EMAIL_SUBJECT_FAILURE"
+                    body: "Stage: Security Scan using Insider CLI was unsuccessful! Debug the code and fix the errors before building again."
                     }
                 }
             }
         }
         stage('Deploy to Staging') {
             steps {
-                script {
-                    echo "Deploy project_code.jar to Azure Spring App with Azure CLI script."
-                    sleep 10
-                    echo "Deployment Status: Successful"
-                }
+                echo "Deploy project_code.jar to Azure Spring App with Azure CLI script."
+                sleep 10
+                echo "Deployment Status: Successful"
             }
         }
         stage('Integration Tests on Staging') {
             steps {
-                script {
-                    echo "Run integration tests on the staging environment using in-built tools within Azure, using an Azure resource."
-                    sleep 1
-                    echo "SUCCESS"
-                    echo "project_code.jar is ready for production deployment"
-                }
+                echo "Run integration tests on the staging environment using in-built tools within Azure, using an Azure resource."
+                sleep 1
+                echo "SUCCESS"
+                echo "project_code.jar is ready for production deployment"
             }
         }
         stage('Deploy to Production Environment') {
             steps {
-                script {
-                    echo "Deploy project_code.jar to Azure Web App production environment using an Azure resource."
-                    sleep 1
-                    echo "SUCCESS"
-                    echo "project_code.jar is successfully deployed to the production environment."
-                }
+                echo "Deploy project_code.jar to Azure Web App production environment using an Azure resource."
+                sleep 1
+                echo "SUCCESS"
+                echo "project_code.jar is successfully deployed to the production environment."
             }
         }
     }
