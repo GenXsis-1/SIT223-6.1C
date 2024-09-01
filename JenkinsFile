@@ -19,7 +19,7 @@ pipeline {
                 echo "SUCCESS"
                 echo "Run integration tests on project_code.jar using JUnit."
                 sleep 1
-                echo "SUCCESS""
+                echo "SUCCESS"
             }
         }
         stage('Code Analysis using PMD') {
