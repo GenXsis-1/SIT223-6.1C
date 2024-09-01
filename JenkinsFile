@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+    
+    // Define Stages
+    stages {
+        stage('Build') {
+            steps {
+                echo "Fetch the source code from the directory path specified by the environment variable."
+                echo "DIRECTORY_PATH: $DIRECTORY_PATH"
+                sleep 1
+                echo "SUCCESS"
+                echo "Compile the code and generate any necessary artifacts."
+                sleep 1
+                echo "SUCCESS"
+            }
+        }
+        stage('Test') {
+            steps {
+                echo "Unit Tests"
+                sleep 3
+                echo "Integration Tests"
+            }
+        }
+        stage('Code Quality Check') {
+            steps {
+                echo "Checking the quality of the code."
+                sleep 1
+                echo "SUCCESS"
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo "Deploy the application to the testing environment specified by the environment variable."
+                echo "TESTING_ENVIRONMENT: $TESTING_ENVIRONMENT"
+                sleep 1
+                echo "SUCCESS"
+            }
+        }
+        stage('Approval') {
+            steps {
+                sleep 10
+            }
+        }
+        stage('Deploy to Production') {
+            steps {
+                echo "Deploy the application to the production environment specified by the environment variable."
+                echo "PRODUCTION_ENVIRONMENT: $PRODUCTION_ENVIRONMENT"
+                sleep 1
+                echo "SUCCESS"
+            }
+        }
+    }
+}
