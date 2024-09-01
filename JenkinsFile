@@ -8,7 +8,6 @@ pipeline {
         BUILD_LOG_PATH = 'build.log' // Adjust this path based on your setup
     }
     
-    // Define Stages
     stages {
         stage('Build using Maven') {
             steps {
@@ -38,6 +37,9 @@ pipeline {
                 }
             }
             post {
+                always {
+                    archiveArtifacts artifacts: "${env.BUILD_LOG_PATH}", allowEmptyArchive: true
+                }
                 success {
                     script {
                         // Send email with build log
@@ -87,6 +89,9 @@ pipeline {
                 }
             }
             post {
+                always {
+                    archiveArtifacts artifacts: "${env.BUILD_LOG_PATH}", allowEmptyArchive: true
+                }
                 success {
                     script {
                         // Send email with build log
