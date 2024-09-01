@@ -3,50 +3,65 @@ pipeline {
     
     // Define Stages
     stages {
-        stage('Build') {
+        stage('Build using Maven') {
             steps {
-                echo "Fetch the source code from the directory path specified by the environment variable."
-                echo "DIRECTORY_PATH: DIRECTORY_PATH"
-                sleep 1
-                echo "SUCCESS"
-                echo "Compile the code and generate any necessary artifacts."
+                echo "Build project_code.jar with Maven."
+                echo "Building..."
                 sleep 1
                 echo "SUCCESS"
             }
         }
-        stage('Test') {
+        stage('Unit and Integration Tests using JUnit') {
             steps {
-                echo "Unit Tests"
-                sleep 3
-                echo "Integration Tests"
+                echo "Run unit tests on project_code.jar using JUnit."
+                echo "Testing..."
+                sleep 1
+                echo "SUCCESS"
+                echo "Run integration tests on project_code.jar using JUnit."
+                sleep 1
+                echo "SUCCESS""
             }
         }
-        stage('Code Quality Check') {
+        stage('Code Analysis using PMD') {
             steps {
-                echo "Checking the quality of the code."
+                echo "Performing code quality analysis on project_code.jar using PMD."
+                echo "Analysing..."
+                sleep 1
+                echo "SUCCESS"
+                echo "Secondary check for specific industry standards"
                 sleep 1
                 echo "SUCCESS"
             }
         }
-        stage('Deploy') {
+        stage('Security Scan using Insider CLI') {
             steps {
-                echo "Deploy the application to the testing environment specified by the environment variable."
-                echo "TESTING_ENVIRONMENT: TESTING_ENVIRONMENT"
+                echo "Perform security check on project_code.jar using Insider CLI"
                 sleep 1
                 echo "SUCCESS"
+                echo "No profound security flaws detected. Score: 98%"
             }
         }
-        stage('Approval') {
+        stage('Deploy to Staging') {
             steps {
+                echo "Deploy project_code.jar to Azure Spring App with Azure CLI script."
                 sleep 10
+                echo "Deployment Status: Successful"
             }
         }
-        stage('Deploy to Production') {
+        stage('Integration Tests on Staging') {
             steps {
-                echo "Deploy the application to the production environment specified by the environment variable."
-                echo "PRODUCTION_ENVIRONMENT: PRODUCTION_ENVIRONMENT"
+                echo "Run integration tests on the staging environment using in-built tools within Azure, using an Azure resource."
                 sleep 1
                 echo "SUCCESS"
+                echo "project_code.jar is ready for production deployment"
+            }
+        }
+        stage('Deploy to Production Environment') {
+            steps {
+                echo "Deploy project_code.jar to Azure Web App production environment using an Azure resource."
+                sleep 1
+                echo "SUCCESS"
+                echo "project_code.jar is successfully deployed to the production environment."
             }
         }
     }
