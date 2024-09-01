@@ -6,7 +6,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Fetch the source code from the directory path specified by the environment variable."
-                echo "DIRECTORY_PATH: $DIRECTORY_PATH"
+                echo "DIRECTORY_PATH: DIRECTORY_PATH"
                 sleep 1
                 echo "SUCCESS"
                 echo "Compile the code and generate any necessary artifacts."
@@ -31,7 +31,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo "Deploy the application to the testing environment specified by the environment variable."
-                echo "TESTING_ENVIRONMENT: $TESTING_ENVIRONMENT"
+                echo "TESTING_ENVIRONMENT: TESTING_ENVIRONMENT"
                 sleep 1
                 echo "SUCCESS"
             }
@@ -44,7 +44,7 @@ pipeline {
         stage('Deploy to Production') {
             steps {
                 echo "Deploy the application to the production environment specified by the environment variable."
-                echo "PRODUCTION_ENVIRONMENT: $PRODUCTION_ENVIRONMENT"
+                echo "PRODUCTION_ENVIRONMENT: PRODUCTION_ENVIRONMENT"
                 sleep 1
                 echo "SUCCESS"
             }
