@@ -7,7 +7,7 @@ pipeline {
         EMAIL_SUBJECT_FAILURE = '6.1C Pipeline Status'
         BUILD_LOG_PATH = 'build.log' // Adjust this path based on your setup
     }
-    
+
     stages {
         stage('Build using Maven') {
             steps {
@@ -42,20 +42,22 @@ pipeline {
                 }
                 success {
                     script {
-                        // Send email with build log
-                        mail to: "${env.EMAIL_RECIPIENT}",
-                             subject: "${env.EMAIL_SUBJECT_SUCCESS}",
-                             body: "Stage: Unit and Integration Tests using JUnit was successful! Build log is attached.",
-                             attachmentsPattern: "${env.BUILD_LOG_PATH}"
+                        emailext (
+                            to: "${env.EMAIL_RECIPIENT}",
+                            subject: "${env.EMAIL_SUBJECT_SUCCESS}",
+                            body: "Stage: Unit and Integration Tests using JUnit was successful! Build log is attached.",
+                            attachmentsPattern: "${env.BUILD_LOG_PATH}"
+                        )
                     }
                 }
                 failure {
                     script {
-                        // Send email with build log
-                        mail to: "${env.EMAIL_RECIPIENT}",
-                             subject: "${env.EMAIL_SUBJECT_FAILURE}",
-                             body: "Stage: Unit and Integration Tests using JUnit was unsuccessful! Debug the code and fix the errors before building again. Build log is attached.",
-                             attachmentsPattern: "${env.BUILD_LOG_PATH}"
+                        emailext (
+                            to: "${env.EMAIL_RECIPIENT}",
+                            subject: "${env.EMAIL_SUBJECT_FAILURE}",
+                            body: "Stage: Unit and Integration Tests using JUnit was unsuccessful! Debug the code and fix the errors before building again. Build log is attached.",
+                            attachmentsPattern: "${env.BUILD_LOG_PATH}"
+                        )
                     }
                 }
             }
@@ -94,20 +96,22 @@ pipeline {
                 }
                 success {
                     script {
-                        // Send email with build log
-                        mail to: "${env.EMAIL_RECIPIENT}",
-                             subject: "${env.EMAIL_SUBJECT_SUCCESS}",
-                             body: "Stage: Security Scan using Insider CLI was successful! Build log is attached.",
-                             attachmentsPattern: "${env.BUILD_LOG_PATH}"
+                        emailext (
+                            to: "${env.EMAIL_RECIPIENT}",
+                            subject: "${env.EMAIL_SUBJECT_SUCCESS}",
+                            body: "Stage: Security Scan using Insider CLI was successful! Build log is attached.",
+                            attachmentsPattern: "${env.BUILD_LOG_PATH}"
+                        )
                     }
                 }
                 failure {
                     script {
-                        // Send email with build log
-                        mail to: "${env.EMAIL_RECIPIENT}",
-                             subject: "${env.EMAIL_SUBJECT_FAILURE}",
-                             body: "Stage: Security Scan using Insider CLI was unsuccessful! Debug the code and fix the errors before building again. Build log is attached.",
-                             attachmentsPattern: "${env.BUILD_LOG_PATH}"
+                        emailext (
+                            to: "${env.EMAIL_RECIPIENT}",
+                            subject: "${env.EMAIL_SUBJECT_FAILURE}",
+                            body: "Stage: Security Scan using Insider CLI was unsuccessful! Debug the code and fix the errors before building again. Build log is attached.",
+                            attachmentsPattern: "${env.BUILD_LOG_PATH}"
+                        )
                     }
                 }
             }
