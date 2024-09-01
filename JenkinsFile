@@ -5,97 +5,144 @@ pipeline {
         EMAIL_RECIPIENT = 'jack.a.jonesofficial@gmail.com'
         EMAIL_SUBJECT_SUCCESS = '6.1C Pipeline Status'
         EMAIL_SUBJECT_FAILURE = '6.1C Pipeline Status'
+        BUILD_LOG_PATH = 'build.log' // Adjust this path based on your setup
     }
     
     // Define Stages
     stages {
         stage('Build using Maven') {
             steps {
-                echo "Build project_code.jar with Maven."
-                echo "Building..."
-                sleep 1
-                echo "SUCCESS"
+                script {
+                    echo "Build project_code.jar with Maven."
+                    echo "Building..."
+                    sleep 1
+                    echo "SUCCESS"
+                    // Capture build logs
+                    sh "echo 'Build using Maven completed.' > ${env.BUILD_LOG_PATH}"
+                }
             }
         }
         stage('Unit and Integration Tests using JUnit') {
             steps {
-                echo "Run unit tests on project_code.jar using JUnit."
-                echo "Testing..."
-                sleep 1
-                echo "SUCCESS"
-                echo "Run integration tests on project_code.jar using JUnit."
-                sleep 1
-                echo "SUCCESS"
-                
-                // Send email upon successful or unsuccessful stage
-                post {
-                    success {
-                    mail to: "$EMAIL_RECIPIENT"
-                    subject: "$EMAIL_SUBJECT_SUCCESS"
-                    body: "Stage: Unit and Integration Tests using JUnit was successful!"
+                script {
+                    echo "Run unit tests on project_code.jar using JUnit."
+                    echo "Testing..."
+                    sleep 1
+                    echo "SUCCESS"
+                    echo "Run integration tests on project_code.jar using JUnit."
+                    sleep 1
+                    echo "SUCCESS"
+                    
+                    // Capture test logs
+                    sh "echo 'Unit and Integration Tests completed.' >> ${env.BUILD_LOG_PATH}"
+                }
+            }
+            post {
+                success {
+                    script {
+                        // Send email with build log
+                        mail to: "${env.EMAIL_RECIPIENT}",
+                             subject: "${env.EMAIL_SUBJECT_SUCCESS}",
+                             body: "Stage: Unit and Integration Tests using JUnit was successful! Build log is attached.",
+                             attachmentsPattern: "${env.BUILD_LOG_PATH}"
                     }
-                    failure {
-                    mail to: "$EMAIL_RECIPIENT"
-                    subject: "$EMAIL_SUBJECT_FAILURE"
-                    body: "Stage: Unit and Integration Tests using JUnit was unsuccessful! Debug the code and fix the errors before building again."
+                }
+                failure {
+                    script {
+                        // Send email with build log
+                        mail to: "${env.EMAIL_RECIPIENT}",
+                             subject: "${env.EMAIL_SUBJECT_FAILURE}",
+                             body: "Stage: Unit and Integration Tests using JUnit was unsuccessful! Debug the code and fix the errors before building again. Build log is attached.",
+                             attachmentsPattern: "${env.BUILD_LOG_PATH}"
                     }
                 }
             }
         }
         stage('Code Analysis using PMD') {
             steps {
-                echo "Performing code quality analysis on project_code.jar using PMD."
-                echo "Analysing..."
-                sleep 1
-                echo "SUCCESS"
-                echo "Secondary check for specific industry standards"
-                sleep 1
-                echo "SUCCESS"
+                script {
+                    echo "Performing code quality analysis on project_code.jar using PMD."
+                    echo "Analysing..."
+                    sleep 1
+                    echo "SUCCESS"
+                    echo "Secondary check for specific industry standards"
+                    sleep 1
+                    echo "SUCCESS"
+                    
+                    // Capture analysis logs
+                    sh "echo 'Code Analysis using PMD completed.' >> ${env.BUILD_LOG_PATH}"
+                }
             }
         }
         stage('Security Scan using Insider CLI') {
             steps {
-                echo "Perform security check on project_code.jar using Insider CLI"
-                sleep 1
-                echo "SUCCESS"
-                echo "No profound security flaws detected. Score: 98%"
-
-                // Send email upon successful or unsuccessful stage
-                post {
-                    success {
-                    mail to: "$EMAIL_RECIPIENT"
-                    subject: "$EMAIL_SUBJECT_SUCCESS"
-                    body: "Stage: Security Scan using Insider CLI was successful!"
+                script {
+                    echo "Perform security check on project_code.jar using Insider CLI"
+                    sleep 1
+                    echo "SUCCESS"
+                    echo "No profound security flaws detected. Score: 98%"
+                    
+                    // Capture security scan logs
+                    sh "echo 'Security Scan using Insider CLI completed.' >> ${env.BUILD_LOG_PATH}"
+                }
+            }
+            post {
+                success {
+                    script {
+                        // Send email with build log
+                        mail to: "${env.EMAIL_RECIPIENT}",
+                             subject: "${env.EMAIL_SUBJECT_SUCCESS}",
+                             body: "Stage: Security Scan using Insider CLI was successful! Build log is attached.",
+                             attachmentsPattern: "${env.BUILD_LOG_PATH}"
                     }
-                    failure {
-                    mail to: "$EMAIL_RECIPIENT"
-                    subject: "$EMAIL_SUBJECT_FAILURE"
-                    body: "Stage: Security Scan using Insider CLI was unsuccessful! Debug the code and fix the errors before building again."
+                }
+                failure {
+                    script {
+                        // Send email with build log
+                        mail to: "${env.EMAIL_RECIPIENT}",
+                             subject: "${env.EMAIL_SUBJECT_FAILURE}",
+                             body: "Stage: Security Scan using Insider CLI was unsuccessful! Debug the code and fix the errors before building again. Build log is attached.",
+                             attachmentsPattern: "${env.BUILD_LOG_PATH}"
                     }
                 }
             }
         }
         stage('Deploy to Staging') {
             steps {
-                echo "Deploy project_code.jar to Azure Spring App with Azure CLI script."
-                sleep 10
-                echo "Deployment Status: Successful"
+                script {
+                    echo "Deploy project_code.jar to Azure Spring App with Azure CLI script."
+                    sleep 10
+                    echo "Deployment Status: Successful"
+                    
+                    // Capture deployment logs
+                    sh "echo 'Deploy to Staging completed.' >> ${env.BUILD_LOG_PATH}"
+                }
             }
         }
         stage('Integration Tests on Staging') {
             steps {
-                echo "Run integration tests on the staging environment using in-built tools within Azure, using an Azure resource."
-                sleep 1
-                echo "SUCCESS"
-                echo "project_code.jar is ready for production deployment"
+                script {
+                    echo "Run integration tests on the staging environment using in-built tools within Azure, using an Azure resource."
+                    sleep 1
+                    echo "SUCCESS"
+                    echo "project_code.jar is ready for production deployment"
+                    
+                    // Capture staging integration tests logs
+                    sh "echo 'Integration Tests on Staging completed.' >> ${env.BUILD_LOG_PATH}"
+                }
             }
         }
         stage('Deploy to Production Environment') {
             steps {
-                echo "Deploy project_code.jar to Azure Web App production environment using an Azure resource."
-                sleep 1
-                echo "SUCCESS"
-                echo "project_code.jar is successfully deployed to the production environment."
+                script {
+                    echo "Deploy project_code.jar to Azure Web App production environment using an Azure resource."
+                    sleep 1
+                    echo "SUCCESS"
+                    echo "project_code.jar is successfully deployed to the production environment."
+                    
+                    // Capture production deployment logs
+                    sh "echo 'Deploy to Production Environment completed.' >> ${env.BUILD_LOG_PATH}"
+                }
             }
         }
     }
