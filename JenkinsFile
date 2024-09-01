@@ -5,7 +5,6 @@ pipeline {
         EMAIL_RECIPIENT = 'jack.a.jonesofficial@gmail.com'
         EMAIL_SUBJECT_SUCCESS = '6.1C Pipeline Status'
         EMAIL_SUBJECT_FAILURE = '6.1C Pipeline Status'
-        BUILD_LOG_PATH = 'build.log' // Adjust this path based on your setup
     }
     
     stages {
@@ -16,8 +15,6 @@ pipeline {
                     echo "Building..."
                     sleep 1
                     echo "SUCCESS"
-                    // Capture build logs
-                    bat "echo Build using Maven completed. > ${env.BUILD_LOG_PATH}"
                 }
             }
         }
@@ -31,32 +28,19 @@ pipeline {
                     echo "Run integration tests on project_code.jar using JUnit."
                     sleep 1
                     echo "SUCCESS"
-                    
-                    // Capture test logs
-                    bat "echo Unit and Integration Tests completed. >> ${env.BUILD_LOG_PATH}"
                 }
             }
             post {
                 always {
-                    archiveArtifacts artifacts: "${env.BUILD_LOG_PATH}", allowEmptyArchive: true
-                }
-                success {
-                    script {
-                        // Send email with build log
-                        mail to: "${env.EMAIL_RECIPIENT}",
-                             subject: "${env.EMAIL_SUBJECT_SUCCESS}",
-                             body: "Stage: Unit and Integration Tests using JUnit was successful! Build log is attached.",
-                             attachmentsPattern: "${env.BUILD_LOG_PATH}"
-                    }
-                }
-                failure {
-                    script {
-                        // Send email with build log
-                        mail to: "${env.EMAIL_RECIPIENT}",
-                             subject: "${env.EMAIL_SUBJECT_FAILURE}",
-                             body: "Stage: Unit and Integration Tests using JUnit was unsuccessful! Debug the code and fix the errors before building again. Build log is attached.",
-                             attachmentsPattern: "${env.BUILD_LOG_PATH}"
-                    }
+                    archiveArtifacts artifacts: '**/*.log', allowEmptyArchive: true
+                    emailext(
+                        to: EMAIL_RECIPIENT,
+                        subject: currentBuild.result == 'SUCCESS' ? EMAIL_SUBJECT_SUCCESS : EMAIL_SUBJECT_FAILURE,
+                        body: currentBuild.result == 'SUCCESS' ?
+                            "Stage: Unit and Integration Tests using JUnit was successful! Build log is attached." :
+                            "Stage: Unit and Integration Tests using JUnit was unsuccessful! Debug the code and fix the errors before building again. Build log is attached.",
+                        attachLog: true
+                    )
                 }
             }
         }
@@ -70,9 +54,6 @@ pipeline {
                     echo "Secondary check for specific industry standards"
                     sleep 1
                     echo "SUCCESS"
-                    
-                    // Capture analysis logs
-                    bat "echo Code Analysis using PMD completed. >> ${env.BUILD_LOG_PATH}"
                 }
             }
         }
@@ -83,32 +64,18 @@ pipeline {
                     sleep 1
                     echo "SUCCESS"
                     echo "No profound security flaws detected. Score: 98%"
-                    
-                    // Capture security scan logs
-                    bat "echo Security Scan using Insider CLI completed. >> ${env.BUILD_LOG_PATH}"
                 }
             }
             post {
                 always {
-                    archiveArtifacts artifacts: "${env.BUILD_LOG_PATH}", allowEmptyArchive: true
-                }
-                success {
-                    script {
-                        // Send email with build log
-                        mail to: "${env.EMAIL_RECIPIENT}",
-                             subject: "${env.EMAIL_SUBJECT_SUCCESS}",
-                             body: "Stage: Security Scan using Insider CLI was successful! Build log is attached.",
-                             attachmentsPattern: "${env.BUILD_LOG_PATH}"
-                    }
-                }
-                failure {
-                    script {
-                        // Send email with build log
-                        mail to: "${env.EMAIL_RECIPIENT}",
-                             subject: "${env.EMAIL_SUBJECT_FAILURE}",
-                             body: "Stage: Security Scan using Insider CLI was unsuccessful! Debug the code and fix the errors before building again. Build log is attached.",
-                             attachmentsPattern: "${env.BUILD_LOG_PATH}"
-                    }
+                    emailext(
+                        to: EMAIL_RECIPIENT,
+                        subject: currentBuild.result == 'SUCCESS' ? EMAIL_SUBJECT_SUCCESS : EMAIL_SUBJECT_FAILURE,
+                        body: currentBuild.result == 'SUCCESS' ?
+                            "Stage: Security Scan using Insider CLI was successful! Build log is attached." :
+                            "Stage: Security Scan using Insider CLI was unsuccessful! Debug the code and fix the errors before building again. Build log is attached.",
+                        attachLog: true
+                    )
                 }
             }
         }
@@ -118,9 +85,6 @@ pipeline {
                     echo "Deploy project_code.jar to Azure Spring App with Azure CLI script."
                     sleep 10
                     echo "Deployment Status: Successful"
-                    
-                    // Capture deployment logs
-                    bat "echo Deploy to Staging completed. >> ${env.BUILD_LOG_PATH}"
                 }
             }
         }
@@ -131,9 +95,6 @@ pipeline {
                     sleep 1
                     echo "SUCCESS"
                     echo "project_code.jar is ready for production deployment"
-                    
-                    // Capture staging integration tests logs
-                    bat "echo Integration Tests on Staging completed. >> ${env.BUILD_LOG_PATH}"
                 }
             }
         }
@@ -144,9 +105,6 @@ pipeline {
                     sleep 1
                     echo "SUCCESS"
                     echo "project_code.jar is successfully deployed to the production environment."
-                    
-                    // Capture production deployment logs
-                    bat "echo Deploy to Production Environment completed. >> ${env.BUILD_LOG_PATH}"
                 }
             }
         }
