@@ -16,8 +16,8 @@ pipeline {
                     echo "Building..."
                     sleep 1
                     echo "SUCCESS"
-                    // Capture build logs
-                    bat "echo Build using Maven completed. > ${env.BUILD_LOG_PATH}"
+                    // Capture build logs with timestamp and stage name
+                    bat "echo [$(date)] [Build using Maven] : Build using Maven completed. >> ${env.BUILD_LOG_PATH}"
                 }
             }
         }
@@ -32,8 +32,8 @@ pipeline {
                     sleep 1
                     echo "SUCCESS"
                     
-                    // Capture test logs
-                    bat "echo Unit and Integration Tests completed. >> ${env.BUILD_LOG_PATH}"
+                    // Capture test logs with timestamp and stage name
+                    bat "echo [$(date)] [Unit and Integration Tests using JUnit] : Unit and Integration Tests completed. >> ${env.BUILD_LOG_PATH}"
                 }
             }
             post {
@@ -55,7 +55,7 @@ pipeline {
                         // Send email with build log content in body
                         mail to: "${env.EMAIL_RECIPIENT}",
                              subject: "${env.EMAIL_SUBJECT_FAILURE}",
-                             body: "Stage: Unit and Integration Tests using JUnit was unsuccessful! Debug the code and fix the errors before building again. Here are the build logs:\n\n${logContent}"
+                             body: "Stage: Unit and Integration Tests using JUnit was unsuccessful! Debug the code and fix the errors before building again. Here are the build logs:\n\nbuild.log Entries\n-----------------\n${logContent}"
                     }
                 }
             }
@@ -71,8 +71,8 @@ pipeline {
                     sleep 1
                     echo "SUCCESS"
                     
-                    // Capture analysis logs
-                    bat "echo Code Analysis using PMD completed. >> ${env.BUILD_LOG_PATH}"
+                    // Capture analysis logs with timestamp and stage name
+                    bat "echo [$(date)] [Code Analysis using PMD] : Code Analysis using PMD completed. >> ${env.BUILD_LOG_PATH}"
                 }
             }
         }
@@ -84,8 +84,8 @@ pipeline {
                     echo "SUCCESS"
                     echo "No profound security flaws detected. Score: 98%"
                     
-                    // Capture security scan logs
-                    bat "echo Security Scan using Insider CLI completed. >> ${env.BUILD_LOG_PATH}"
+                    // Capture security scan logs with timestamp and stage name
+                    bat "echo [$(date)] [Security Scan using Insider CLI] : Security Scan using Insider CLI completed. >> ${env.BUILD_LOG_PATH}"
                 }
             }
             post {
@@ -107,7 +107,7 @@ pipeline {
                         // Send email with build log content in body
                         mail to: "${env.EMAIL_RECIPIENT}",
                              subject: "${env.EMAIL_SUBJECT_FAILURE}",
-                             body: "Stage: Security Scan using Insider CLI was unsuccessful! Debug the code and fix the errors before building again. Here are the build logs:\n\n${logContent}"
+                             body: "Stage: Security Scan using Insider CLI was unsuccessful! Debug the code and fix the errors before building again. Here are the build logs:\n\nbuild.log Entries\n-----------------\n${logContent}"
                     }
                 }
             }
@@ -119,8 +119,8 @@ pipeline {
                     sleep 10
                     echo "Deployment Status: Successful"
                     
-                    // Capture deployment logs
-                    bat "echo Deploy to Staging completed. >> ${env.BUILD_LOG_PATH}"
+                    // Capture deployment logs with timestamp and stage name
+                    bat "echo [$(date)] [Deploy to Staging] : Deploy to Staging completed. >> ${env.BUILD_LOG_PATH}"
                 }
             }
         }
@@ -132,8 +132,8 @@ pipeline {
                     echo "SUCCESS"
                     echo "project_code.jar is ready for production deployment"
                     
-                    // Capture staging integration tests logs
-                    bat "echo Integration Tests on Staging completed. >> ${env.BUILD_LOG_PATH}"
+                    // Capture staging integration tests logs with timestamp and stage name
+                    bat "echo [$(date)] [Integration Tests on Staging] : Integration Tests on Staging completed. >> ${env.BUILD_LOG_PATH}"
                 }
             }
         }
@@ -145,8 +145,8 @@ pipeline {
                     echo "SUCCESS"
                     echo "project_code.jar is successfully deployed to the production environment."
                     
-                    // Capture production deployment logs
-                    bat "echo Deploy to Production Environment completed. >> ${env.BUILD_LOG_PATH}"
+                    // Capture production deployment logs with timestamp and stage name
+                    bat "echo [$(date)] [Deploy to Production Environment] : Deploy to Production Environment completed. >> ${env.BUILD_LOG_PATH}"
                 }
             }
         }
