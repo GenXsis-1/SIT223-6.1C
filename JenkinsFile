@@ -37,9 +37,6 @@ pipeline {
                 }
             }
             post {
-                always {
-                    archiveArtifacts artifacts: "${env.BUILD_LOG_PATH}", allowEmptyArchive: true
-                }
                 success {
                     script {
                         def logContent = readFile(file: "${env.BUILD_LOG_PATH}")
@@ -89,9 +86,6 @@ pipeline {
                 }
             }
             post {
-                always {
-                    archiveArtifacts artifacts: "${env.BUILD_LOG_PATH}", allowEmptyArchive: true
-                }
                 success {
                     script {
                         def logContent = readFile(file: "${env.BUILD_LOG_PATH}")
