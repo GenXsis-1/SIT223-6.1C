@@ -52,7 +52,7 @@ pipeline {
                         // Send email with build log content in body
                         mail to: "${env.EMAIL_RECIPIENT}",
                              subject: "${env.EMAIL_SUBJECT_FAILURE}",
-                             body: "Stage: Unit and Integration Tests using JUnit was unsuccessful! Debug the code and fix the errors before building again. Here are the build logs:\n\nbuild.log Entries\n-----------------\n${logContent}"
+                             body: "Stage: Unit and Integration Tests using JUnit was unsuccessful! Debug the code and fix the errors before building again. Here are the build logs:\n\nLog Entries\n-----------------\n${logContent}"
                     }
                 }
             }
@@ -101,7 +101,7 @@ pipeline {
                         // Send email with build log content in body
                         mail to: "${env.EMAIL_RECIPIENT}",
                              subject: "${env.EMAIL_SUBJECT_FAILURE}",
-                             body: "Stage: Security Scan using Insider CLI was unsuccessful! Debug the code and fix the errors before building again. Here are the build logs:\n\nbuild.log Entries\n-----------------\n${logContent}"
+                             body: "Stage: Security Scan using Insider CLI was unsuccessful! Debug the code and fix the errors before building again. Here are the build logs:\n\nLog Entries\n-----------------\n${logContent}"
                     }
                 }
             }
