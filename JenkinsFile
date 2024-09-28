@@ -39,20 +39,24 @@ pipeline {
             post {
                 success {
                     script {
-                        def logContent = readFile(file: "${env.BUILD_LOG_PATH}")
-                        // Send email with build log content in body
-                        mail to: "${env.EMAIL_RECIPIENT}",
-                             subject: "${env.EMAIL_SUBJECT_SUCCESS}",
-                             body: "Stage: Unit and Integration Tests using JUnit was successful! Here are the build logs:\n\n${logContent}"
+                        emailext(
+                            to: "${env.EMAIL_RECIPIENT}",
+                            subject: "${env.EMAIL_SUBJECT_SUCCESS}",
+                            body: "Stage: Unit and Integration Tests using JUnit was successful! The build log is attached.",
+                            attachLog: true,
+                            attachmentsPattern: "${env.BUILD_LOG_PATH}"
+                        )
                     }
                 }
                 failure {
                     script {
-                        def logContent = readFile(file: "${env.BUILD_LOG_PATH}")
-                        // Send email with build log content in body
-                        mail to: "${env.EMAIL_RECIPIENT}",
-                             subject: "${env.EMAIL_SUBJECT_FAILURE}",
-                             body: "Stage: Unit and Integration Tests using JUnit was unsuccessful! Debug the code and fix the errors before building again. Here are the build logs:\n\nLog Entries\n-----------------\n${logContent}"
+                        emailext(
+                            to: "${env.EMAIL_RECIPIENT}",
+                            subject: "${env.EMAIL_SUBJECT_FAILURE}",
+                            body: "Stage: Unit and Integration Tests using JUnit was unsuccessful! Debug the code and fix the errors before building again. The build log is attached.",
+                            attachLog: true,
+                            attachmentsPattern: "${env.BUILD_LOG_PATH}"
+                        )
                     }
                 }
             }
@@ -88,20 +92,24 @@ pipeline {
             post {
                 success {
                     script {
-                        def logContent = readFile(file: "${env.BUILD_LOG_PATH}")
-                        // Send email with build log content in body
-                        mail to: "${env.EMAIL_RECIPIENT}",
-                             subject: "${env.EMAIL_SUBJECT_SUCCESS}",
-                             body: "Stage: Security Scan using Insider CLI was successful! Here are the build logs:\n\n${logContent}"
+                        emailext(
+                            to: "${env.EMAIL_RECIPIENT}",
+                            subject: "${env.EMAIL_SUBJECT_SUCCESS}",
+                            body: "Stage: Security Scan using Insider CLI was successful! The build log is attached.",
+                            attachLog: true,
+                            attachmentsPattern: "${env.BUILD_LOG_PATH}"
+                        )
                     }
                 }
                 failure {
                     script {
-                        def logContent = readFile(file: "${env.BUILD_LOG_PATH}")
-                        // Send email with build log content in body
-                        mail to: "${env.EMAIL_RECIPIENT}",
-                             subject: "${env.EMAIL_SUBJECT_FAILURE}",
-                             body: "Stage: Security Scan using Insider CLI was unsuccessful! Debug the code and fix the errors before building again. Here are the build logs:\n\nLog Entries\n-----------------\n${logContent}"
+                        emailext(
+                            to: "${env.EMAIL_RECIPIENT}",
+                            subject: "${env.EMAIL_SUBJECT_FAILURE}",
+                            body: "Stage: Security Scan using Insider CLI was unsuccessful! Debug the code and fix the errors before building again. The build log is attached.",
+                            attachLog: true,
+                            attachmentsPattern: "${env.BUILD_LOG_PATH}"
+                        )
                     }
                 }
             }
